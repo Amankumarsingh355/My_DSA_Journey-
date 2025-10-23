@@ -12,10 +12,9 @@ public class Solution {
         }
         return prev1;
     }
-
     public static void main(String[] args) {
         Solution s = new Solution();
-        System.out.println(s.rob(new int[] {1,2,3,1})); // 4
-        System.out.println(s.rob(new int[] {2,7,9,3,1})); // 12
+        System.out.println(s.rob(new int[] {1,2,3,1})); 
+        System.out.println(s.rob(new int[] {2,7,9,3,1}));
     }
 }
