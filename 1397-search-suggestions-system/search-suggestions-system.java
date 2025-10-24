@@ -1,5 +1,3 @@
-import java.util.*;
-
 public class Solution {
     public List<List<String>> suggestedProducts(String[] products, String searchWord) {
         Arrays.sort(products);
@@ -16,10 +14,8 @@ public class Solution {
         }
         return result;
     }
-
-    // Find first index i such that products[i] >= key lexicographically (lower bound)
     private int lowerBound(String[] products, String key) {
-        int lo = 0, hi = products.length; // hi is exclusive
+        int lo = 0, hi = products.length;
         while (lo < hi) {
             int mid = lo + (hi - lo) / 2;
             if (products[mid].compareTo(key) < 0) lo = mid + 1;
@@ -27,8 +23,6 @@ public class Solution {
         }
         return lo;
     }
-
-    // quick test
     public static void main(String[] args) {
         Solution s = new Solution();
         String[] products1 = {"mobile","mouse","moneypot","monitor","mousepad"};
