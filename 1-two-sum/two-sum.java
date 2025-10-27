@@ -1,5 +1,3 @@
-import java.util.HashMap;
-import java.util.Map;
 public class Solution {
     public int[] twoSum(int[] arr, int tgt) {
         Map<Integer, Integer> map = new HashMap<>();
