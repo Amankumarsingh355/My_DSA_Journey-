@@ -12,7 +12,6 @@ public class Solution {
             if (k == 0) return curr.val;
             curr = curr.right;
         }
-        // k is guaranteed valid per problem statement; return -1 as fallback
         return -1;
     }
 }
