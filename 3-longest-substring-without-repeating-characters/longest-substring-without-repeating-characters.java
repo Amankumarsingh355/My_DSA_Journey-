@@ -34,9 +34,9 @@ public class Solution {
     }
     public static void main(String[] args) {
         Solution sol = new Solution();
-        System.out.println(sol.lengthOfLongestSubstring("abcabcbb")); // 3
+        System.out.println(sol.lengthOfLongestSubstring("abcabcbb"));
         Node root = new Node(1, new Node(2), new Node(3));
         sol.transformTree(root);
-        System.out.println(root.left.val + " " + root.right.val); // 3 2 after swap
+        System.out.println(root.left.val + " " + root.right.val);
     }
 }
