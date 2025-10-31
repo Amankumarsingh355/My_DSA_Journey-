@@ -1,55 +1,86 @@
+import java.util.*;
+
 public class Solution {
-    public class TrieNode{
-        public boolean isWord = false;
-        public TrieNode[] child = new TrieNode[26];
-        public TrieNode(){
-            
-        }
+    private static class TrieNode {
+        TrieNode[] child = new TrieNode[26];
+        String word = null; // store complete word at terminal node
     }
-    TrieNode root = new TrieNode();
-    boolean[][] flag;
+
+    private TrieNode root = new TrieNode();
+    private int rows, cols;
+    private char[][] board;
+    private final int[] dr = {-1, 1, 0, 0};
+    private final int[] dc = {0, 0, -1, 1};
+
     public List<String> findWords(char[][] board, String[] words) {
-        Set<String> result = new HashSet<>();
-        flag = new boolean[board.length][board[0].length];
-        addToTrie(words);
-        for(int i = 0; i < board.length; i++){
-            for(int j = 0; j < board[0].length; j++){
-                if(root.child[board[i][j] - 'a'] != null){
-                    search(board, i, j, root, "", result);
+        this.board = board;
+        rows = board.length;
+        cols = rows == 0 ? 0 : board[0].length;
+
+        buildTrie(words);
+        List<String> res = new ArrayList<>();
+
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                int idx = board[r][c] - 'a';
+                if (idx >= 0 && idx < 26 && root.child[idx] != null) {
+                    dfs(r, c, root, res);
                 }
             }
         }
-        return new LinkedList<>(result);
+        return res;
     }
-    private void addToTrie(String[] words){
-        for(String word: words){
+
+    private void buildTrie(String[] words) {
+        for (String w : words) {
             TrieNode node = root;
-            for(int i = 0; i < word.length(); i++){
-                char ch = word.charAt(i);
-                if(node.child[ch - 'a'] == null){
-                    node.child[ch - 'a'] = new TrieNode();
-                }
-                node = node.child[ch - 'a'];
+            for (char ch : w.toCharArray()) {
+                int i = ch - 'a';
+                if (node.child[i] == null) node.child[i] = new TrieNode();
+                node = node.child[i];
             }
-            node.isWord = true;
+            node.word = w;
         }
     }
-    private void search(char[][] board, int i, int j, TrieNode node, String word, Set<String> result){
-        if(i >= board.length || i < 0 || j >= board[i].length || j < 0 || flag[i][j]){
-            return;
+
+    private void dfs(int r, int c, TrieNode parent, List<String> res) {
+        char ch = board[r][c];
+        int idx = ch - 'a';
+        TrieNode node = parent.child[idx];
+        if (node == null) return;
+
+        if (node.word != null) {
+            res.add(node.word);
+            node.word = null; // avoid duplicate results
         }
-        if(node.child[board[i][j] - 'a'] == null){
-            return;
+
+        // mark visited
+        board[r][c] = '#';
+
+        for (int k = 0; k < 4; k++) {
+            int nr = r + dr[k];
+            int nc = c + dc[k];
+            if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) continue;
+            char next = board[nr][nc];
+            if (next == '#') continue;
+            int nextIdx = next - 'a';
+            if (nextIdx < 0 || nextIdx >= 26) continue;
+            if (node.child[nextIdx] != null) dfs(nr, nc, node, res);
         }
-        flag[i][j] = true;
-        node = node.child[board[i][j] - 'a'];
-        if(node.isWord){
-            result.add(word + board[i][j]);
+
+        // restore
+        board[r][c] = ch;
+
+        // prune empty leaf to speed up future checks
+        if (isEmpty(node)) {
+            parent.child[idx] = null;
         }
-        search(board, i-1, j, node, word + board[i][j], result);
-        search(board, i+1, j, node, word + board[i][j], result);
-        search(board, i, j-1, node, word + board[i][j], result);
-        search(board, i, j+1, node, word + board[i][j], result);
-        flag[i][j] = false;
+    }
+
+    private boolean isEmpty(TrieNode node) {
+        if (node == null) return true;
+        if (node.word != null) return false;
+        for (TrieNode ch : node.child) if (ch != null) return false;
+        return true;
     }
 }
