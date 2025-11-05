@@ -1,28 +1,27 @@
 class Solution {
     public String longestPalindrome(String s) {
-        if (s == null || s.length() < 2) return s;
-        int n = s.length();
-        int start = 0, end = 0;
-        for (int i = 0; i < n; i++) {
-            int[] odd = expandAroundCenter(s, i, i);
-            int[] even = expandAroundCenter(s, i, i + 1);
-            if (odd[1] - odd[0] > end - start) {
-                start = odd[0];
-                end = odd[1];
+        if (s.isEmpty())
+            return "";
+        int[] longestPalindromeIndices = { 0, 0 };
+        for (int i = 0; i < s.length(); ++i) {
+            int[] currentIndices = expandAroundCenter(s, i, i);
+            if (currentIndices[1] - currentIndices[0] > longestPalindromeIndices[1] - longestPalindromeIndices[0]) {
+                longestPalindromeIndices = currentIndices;
             }
-            if (even[1] - even[0] > end - start) {
-                start = even[0];
-                end = even[1];
+            if (i + 1 < s.length() && s.charAt(i) == s.charAt(i + 1)) {
+                int[] evenIndices = expandAroundCenter(s, i, i + 1);
+                if (evenIndices[1] - evenIndices[0] > longestPalindromeIndices[1] - longestPalindromeIndices[0]) {
+                    longestPalindromeIndices = evenIndices;
+                }
             }
         }
-        return s.substring(start, end + 1);
+        return s.substring(longestPalindromeIndices[0], longestPalindromeIndices[1] + 1);
     }
-    private int[] expandAroundCenter(String s, int left, int right) {
-        int n = s.length();
-        while (left >= 0 && right < n && s.charAt(left) == s.charAt(right)) {
-            left--;
-            right++;
+    private int[] expandAroundCenter(final String s, int i, int j) {
+        while (i >= 0 && j < s.length() && s.charAt(i) == s.charAt(j)) {
+            i--;
+            j++; 
         }
-        return new int[] { left + 1, right - 1 };
+        return new int[] { i + 1, j - 1 };
     }
 }
