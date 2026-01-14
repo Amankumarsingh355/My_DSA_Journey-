@@ -1,22 +1,15 @@
 import java.util.*;
-
 class Solution {
-    // Helper class to represent active X-intervals
     private static class Interval implements Comparable<Interval> {
         int start, end;
-        
         Interval(int start, int end) {
             this.start = start;
             this.end = end;
         }
-        
-        // Needed for sort
         public int compareTo(Interval other) {
             if (this.start != other.start) return Integer.compare(this.start, other.start);
             return Integer.compare(this.end, other.end);
         }
-
-        // Needed for removing specific objects from ArrayList
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
@@ -24,25 +17,20 @@ class Solution {
             return start == interval.start && end == interval.end;
         }
     }
-
-    // Helper class for Sweep Line events
     private static class Event implements Comparable<Event> {
         int y;
-        int type; // 1 for start, -1 for end
+        int type;
         int xStart, xEnd;
-
         Event(int y, int type, int xStart, int xEnd) {
             this.y = y;
             this.type = type;
             this.xStart = xStart;
             this.xEnd = xEnd;
         }
-
         public int compareTo(Event other) {
             return Integer.compare(this.y, other.y);
         }
     }
-
     public double separateSquares(int[][] squares) {
         List<Event> sweepEvents = new ArrayList<>();
         for (int[] sq : squares) {
@@ -52,7 +40,6 @@ class Solution {
             sweepEvents.add(new Event(y, 1, x, x + l));
             sweepEvents.add(new Event(y + l, -1, x, x + l));
         }
-
         Collections.sort(sweepEvents);
 
         List<Interval> activeIntervals = new ArrayList<>();
