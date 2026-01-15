@@ -1,20 +1,31 @@
+import java.util.*;
+
 class Solution {
-    public int maximizeSquareHoleArea(int n, int m, int[] hBars, int[] vBars) {
-        return (int) Math.pow(Math.min(findMaxGap(hBars), findMaxGap(vBars)), 2);
-    }
-    public int findMaxGap(int[] bars) {
+
+    private int maxConsecutive(int[] bars) {
+        if (bars.length == 0) return 0;
+
         Arrays.sort(bars);
-        int maxConsecutive = 1;
-        int currConsecutive = 1;
-        int n = bars.length;
-        for (int i=0; i<n-1; i++) {
-            if (bars[i] + 1 == bars[i+1]) {
-                currConsecutive++;
-                maxConsecutive = Math.max(maxConsecutive, currConsecutive);
-            } else {
-                currConsecutive = 1;
-            }
+        int maxLen = 1, currLen = 1;
+
+        for (int i = 1; i < bars.length; i++) {
+            if (bars[i] == bars[i - 1] + 1)
+                currLen++;
+            else
+                currLen = 1;
+
+            maxLen = Math.max(maxLen, currLen);
         }
-        return maxConsecutive + 1;
+        return maxLen;
+    }
+
+    public int maximizeSquareHoleArea(int n, int m,
+                                      int[] hBars, int[] vBars) {
+
+        int maxH = maxConsecutive(hBars);
+        int maxV = maxConsecutive(vBars);
+
+        int side = Math.min(maxH + 1, maxV + 1);
+        return side * side;
     }
 }
