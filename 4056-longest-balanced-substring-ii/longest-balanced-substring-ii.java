@@ -1,70 +1,55 @@
 class Solution {
+    private String key(int x, int y) {
+        return x + "#" + y;
+    }
+
     public int longestBalanced(String s) {
         int n = s.length();
-        if (n == 0) return 0;
-        int maxRun = 1;
-        int run = 1;
-        for (int i = 1; i < n; ++i) {
-            if (s.charAt(i) == s.charAt(i - 1)) {
-                run++;
-            } else {
-                maxRun = Math.max(maxRun, run);
-                run = 1;
-            }
+        int a = 0, b = 0, c = 0;
+        int ans = 0;
+
+        int run = 0;
+        char prev = 0;
+        for (int i = 0; i < n; ++i) {
+            if (i == 0 || s.charAt(i) != prev) run = 1;
+            else run++;
+            prev = s.charAt(i);
+            ans = Math.max(ans, run);
         }
-        maxRun = Math.max(maxRun, run);
-        int ans = Math.max(1, maxRun); 
-        {
-            int a = 0, b = 0, c = 0;
-            Map<String, Integer> map = new HashMap<>();
-            map.put("0,0", -1);
-            for (int i = 0; i < n; ++i) {
-                char ch = s.charAt(i);
-                if (ch == 'a') a++;
-                else if (ch == 'b') b++;
-                else c++;
-                String key = (a - b) + "," + (a - c);
-                if (map.containsKey(key)) {
-                    ans = Math.max(ans, i - map.get(key));
-                } else {
-                    map.put(key, i);
-                }
-            }
+
+        Map<String, Integer> map3 = new HashMap<>();
+        Map<String, Integer> map_ab_c = new HashMap<>();
+        Map<String, Integer> map_ac_b = new HashMap<>();
+        Map<String, Integer> map_bc_a = new HashMap<>();
+
+        map3.put(key(0,0), 0);
+        map_ab_c.put(key(0,0), 0);
+        map_ac_b.put(key(0,0), 0);
+        map_bc_a.put(key(0,0), 0);
+
+        for (int p = 1; p <= n; ++p) {
+            char ch = s.charAt(p-1);
+            if (ch == 'a') a++;
+            else if (ch == 'b') b++;
+            else c++;
+
+            String k3 = key(b - a, c - a);
+            if (map3.containsKey(k3)) ans = Math.max(ans, p - map3.get(k3));
+            else map3.put(k3, p);
+
+            String kabc = key(b - a, c);
+            if (map_ab_c.containsKey(kabc)) ans = Math.max(ans, p - map_ab_c.get(kabc));
+            else map_ab_c.put(kabc, p);
+
+            String kacb = key(c - a, b);
+            if (map_ac_b.containsKey(kacb)) ans = Math.max(ans, p - map_ac_b.get(kacb));
+            else map_ac_b.put(kacb, p);
+
+            String kbc = key(c - b, a);
+            if (map_bc_a.containsKey(kbc)) ans = Math.max(ans, p - map_bc_a.get(kbc));
+            else map_bc_a.put(kbc, p);
         }
-        ans = Math.max(ans, longestForPair(s, 'a', 'b', 'c'));
-        ans = Math.max(ans, longestForPair(s, 'a', 'c', 'b'));
-        ans = Math.max(ans, longestForPair(s, 'b', 'c', 'a'));
+
         return ans;
-    }
-    private int longestForPair(String s, char x, char y, char sep) {
-        int n = s.length();
-        int best = 0;
-        int i = 0;
-        while (i < n) {
-            while (i < n && s.charAt(i) == sep) i++;
-            if (i >= n) break;
-            int start = i;
-            while (i < n && s.charAt(i) != sep) i++;
-            int end = i - 1;
-            best = Math.max(best, longestEqualTwoCharsInRange(s, start, end, x, y));
-        }
-        return best;
-    }
-    private int longestEqualTwoCharsInRange(String s, int start, int end, char x, char y) {
-        Map<Integer, Integer> map = new HashMap<>();
-        int diff = 0;
-        map.put(0, start - 1);
-        int best = 0;
-        for (int i = start; i <= end; ++i) {
-            char ch = s.charAt(i);
-            if (ch == x) diff++;
-            else if (ch == y) diff--;
-            if (map.containsKey(diff)) {
-                best = Math.max(best, i - map.get(diff));
-            } else {
-                map.put(diff, i);
-            }
-        }
-        return best;
     }
 }
