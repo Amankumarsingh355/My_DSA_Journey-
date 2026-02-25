@@ -8,7 +8,6 @@ class Solution {
     }
 }
 class BitCountComparator implements Comparator<Integer> {
-    @Override
     public int compare(Integer a, Integer b) {
         int bitCountA = Integer.bitCount(a);
         int bitCountB = Integer.bitCount(b);
