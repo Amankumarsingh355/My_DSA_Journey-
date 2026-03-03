@@ -9,7 +9,7 @@ class Solution {
         if(k<mid){
             return findKthBit(n-1,k);
         }else{
-            int temp = findKthBit(n+1,len-k+1);
+            int temp = findKthBit(n-1,len-k+1);
             return temp=='0'? '1':'0';
         }
     }
