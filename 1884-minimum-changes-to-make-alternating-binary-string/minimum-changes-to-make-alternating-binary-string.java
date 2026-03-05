@@ -5,7 +5,7 @@ class Solution {
 
         for( int i = 0; i < n; i++ ) {
             char ch = s.charAt(i);
-            if( i % 2  != 0 ) {
+            if( i % 2  == 0 ) {
                 if( ch == '0' ) {
                     start_with_1 += 1;
                 }
@@ -17,7 +17,6 @@ class Solution {
             }
         }
         
-
         return Math.min( start_with_1, n - start_with_1 );
 
     }
