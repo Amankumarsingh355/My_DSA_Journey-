@@ -10,7 +10,7 @@ class Solution {
         for (int i = 0; i < (1 << n); i++) {
             if (!seen.contains(i)) {
                 String bin = Integer.toBinaryString(i);
-                while (bin.length() < n) {
+                while (bin.length()< n) {
                     bin = "0" + bin;
                 }
                 return bin;
