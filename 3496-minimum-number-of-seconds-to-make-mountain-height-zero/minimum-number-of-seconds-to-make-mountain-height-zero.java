@@ -1,7 +1,11 @@
 class Solution {
+
     private boolean can(long time, int mountainHeight, int[] workerTimes) {
+
         long totalHeight = 0;
+
         for (int t : workerTimes) {
+
             long left = 0, right = mountainHeight;
 
             while (left <= right) {
@@ -37,11 +41,12 @@ class Solution {
 
             if (can(mid, mountainHeight, workerTimes)) {
                 ans = mid;
-                right = mid-1;
+                right = mid - 1;
             } else {
                 left = mid + 1;
             }
         }
+
         return ans;
     }
 }
