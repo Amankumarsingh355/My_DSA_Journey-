@@ -16,9 +16,11 @@ class Solution {
             return;
         }
         int l=cur.length();
+       
         if(cur.charAt(l-1)=='a'){
             generate(cur+"b",n,k);
             generate(cur+"c",n,k);
+            
         }
         else if(cur.charAt(l-1)=='b'){
             generate(cur+"a",n,k);
