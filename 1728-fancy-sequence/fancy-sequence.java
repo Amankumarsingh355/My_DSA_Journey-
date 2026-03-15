@@ -3,6 +3,7 @@ class Fancy {
     long mod = 1000000007;
     ArrayList<Long> val = new ArrayList<>();
     long a = 1, b = 0;
+
     long modPow(long x, long y){
         long res = 1;
         x %= mod;
