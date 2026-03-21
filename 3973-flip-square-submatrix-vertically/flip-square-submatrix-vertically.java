@@ -5,6 +5,7 @@ class Solution {
         }
         return grid;
     }
+
     public void reverseColumn(int[][] grid, int r, int c, int k) {
         int s = r, e = r + k - 1;
         while (s < e) {
