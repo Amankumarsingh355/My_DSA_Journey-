@@ -21,9 +21,10 @@ class Solution {
                 answer[curr] = Math.min(distPrev, distNext);
             }
         }
-        List<Integer > result = new ArrayList<>();
+        List<Integer> result = new ArrayList<>();
         for (int idx : queries) {
             result.add(answer[idx]);
+        
         }
         return result;
     }
