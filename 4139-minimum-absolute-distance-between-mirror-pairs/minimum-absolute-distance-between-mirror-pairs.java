@@ -1,7 +1,6 @@
 class Solution {
     private int reverseNum(int x) {
         int rev = 0;
-
         while (x > 0) {
             rev = rev * 10 + (x % 10);
             x /= 10;
@@ -15,6 +14,7 @@ class Solution {
             if (lastIndex.containsKey(nums[i])) {
                 ans = Math.min(ans, i - lastIndex.get(nums[i]));
             }
+
             int rev = reverseNum(nums[i]);
             lastIndex.put(rev, i);
         }
