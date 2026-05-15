@@ -1,27 +1,34 @@
-class Solution {
+public class Solution {
     public String longestPalindrome(String s) {
-        if (s.isEmpty())
-            return "";
-        int[] longestPalindromeIndices = { 0, 0 };
-        for (int i = 0; i < s.length(); ++i) {
-            int[] currentIndices = expandAroundCenter(s, i, i);
-            if (currentIndices[1] - currentIndices[0] > longestPalindromeIndices[1] - longestPalindromeIndices[0]) {
-                longestPalindromeIndices = currentIndices;
-            }
-            if (i + 1 < s.length() && s.charAt(i) == s.charAt(i + 1)) {
-                int[] evenIndices = expandAroundCenter(s, i, i + 1);
-                if (evenIndices[1] - evenIndices[0] > longestPalindromeIndices[1] - longestPalindromeIndices[0]) {
-                    longestPalindromeIndices = evenIndices;
-                }
+        StringBuilder sb = new StringBuilder("^#");
+        for (char c : s.toCharArray()) {
+            sb.append(c).append("#");
+        }
+        sb.append("$");
+        String T = sb.toString();
+        
+        int n = T.length();
+        int[] P = new int[n];
+        int C = 0, R = 0;
+        
+        for (int i = 1; i < n-1; i++) {
+            P[i] = (R > i) ? Math.min(R - i, P[2*C - i]) : 0;
+            while (T.charAt(i + 1 + P[i]) == T.charAt(i - 1 - P[i]))
+                P[i]++;
+            
+            if (i + P[i] > R) {
+                C = i;
+                R = i + P[i];
             }
         }
-        return s.substring(longestPalindromeIndices[0], longestPalindromeIndices[1] + 1);
-    }
-    private int[] expandAroundCenter(final String s, int i, int j) {
-        while (i >= 0 && j < s.length() && s.charAt(i) == s.charAt(j)) {
-            i--;
-            j++; 
+        
+        int max_len = 0, center_index = 0;
+        for (int i = 0; i < n; i++) {
+            if (P[i] > max_len) {
+                max_len = P[i];
+                center_index = i;
+            }
         }
-        return new int[] { i + 1, j - 1 };
+        return s.substring((center_index - max_len) / 2, (center_index + max_len) / 2);
     }
 }
