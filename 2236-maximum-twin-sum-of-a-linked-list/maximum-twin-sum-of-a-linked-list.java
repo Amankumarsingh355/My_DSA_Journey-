@@ -1,6 +1,7 @@
 class Solution {
     public int pairSum(ListNode head) {
-        ListNode slow = head, fast = head;
+        ListNode slow = head;
+        ListNode fast = head;
         while (fast != null && fast.next != null) {
             slow = slow.next;
             fast = fast.next.next;
@@ -12,12 +13,14 @@ class Solution {
             prev = slow;
             slow = nextNode;
         }
-        int maxSum = 0;
-        while (prev != null) {
-            maxSum = Math.max(maxSum, head.val + prev.val);
-            head = head.next;
-            prev = prev.next;
+        int ans = 0;
+        ListNode first = head;
+        ListNode second = prev;
+        while (second != null) {
+            ans = Math.max(ans, first.val + second.val);
+            first = first.next;
+            second = second.next;
         }
-        return maxSum;
+        return ans;
     }
 }
