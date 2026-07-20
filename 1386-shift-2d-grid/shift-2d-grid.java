@@ -1,25 +1,26 @@
 class Solution {
     public List<List<Integer>> shiftGrid(int[][] grid, int k) {
-        int rowCount = grid.length;                         
-        int colCount = grid[0].length;                      
-        int gridCount = rowCount * colCount;              
-        k = k % gridCount;                                  
-        int kCol = (gridCount - k) % colCount;              
-        int kRow = ((gridCount - k) % gridCount) / colCount;
-        int[] innRow = grid[kRow];                         
-        int[][] result = new int[rowCount][colCount];      
-        for (int r = 0; r < rowCount; r++) {                
-            int[] outRow = result[r];                      
-            for (int c = 0; c < colCount; c++) {            
-                outRow[c] = innRow[kCol];                   
-                if (++kCol >= colCount) {                   
-                    kCol = 0;                               
-                    if (++kRow >= rowCount)                 
-                        kRow = 0;                          
-                    innRow = grid[kRow];                    
-                }
+        int m = grid.length;
+        int n = grid[0].length;
+        int total = m * n;
+        k %= total;
+        List<List<Integer>> ans = new ArrayList<>();
+        for (int i = 0; i < m; i++) {
+            List<Integer> row = new ArrayList<>();
+            for (int j = 0; j < n; j++) {
+                row.add(0);
+            }
+            ans.add(row);
+        }
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                int oldIndex = i * n + j;
+                int newIndex = (oldIndex + k) % total;
+                int newRow = newIndex / n;
+                int newCol = newIndex % n;
+                ans.get(newRow).set(newCol, grid[i][j]);
             }
         }
-        return (List)Arrays.asList(result);                 
+        return ans;
     }
 }
