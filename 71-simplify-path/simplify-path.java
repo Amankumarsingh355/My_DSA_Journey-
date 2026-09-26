@@ -1,27 +1,28 @@
-public class Solution {
+class Solution {
     public String simplifyPath(String path) {
-        Deque<String> stack = new ArrayDeque<>();
-        for (String part : path.split("/")) {
-            if (part.isEmpty() || part.equals(".")) continue;
-            if (part.equals("..")) {
-                if (!stack.isEmpty()) stack.pop();
-            } else {
-                stack.push(part);
+        String[] arr = path.split("/");
+        Stack<String> stack = new Stack();
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i].trim() != "") {
+                stack.push(arr[i]);
             }
         }
-        if (stack.isEmpty()) return "/";
         StringBuilder sb = new StringBuilder();
+        int count = 0;
         while (!stack.isEmpty()) {
-            sb.append('/').append(stack.removeLast());
+            String s = stack.pop();
+            if (s.equals("..")) {
+                count++;
+            } else if (s.equals(".")) {
+                continue;
+            } else {
+                if (count == 0) {
+                    sb.insert(0, "/" + s);
+                } else {
+                    count--;
+                }
+            }
         }
-        return sb.toString();
-    }
-    public static void main(String[] args) {
-        Solution s = new Solution();
-        System.out.println(s.simplifyPath("/home/"));             
-        System.out.println(s.simplifyPath("/home//foo/"));        
-        System.out.println(s.simplifyPath("/home/user/Documents/../Pictures"));
-        System.out.println(s.simplifyPath("/../"));                     
-        System.out.println(s.simplifyPath("/.../a/../b/c/../d/./"));    
+        return sb.toString().length() == 0 ? "/" : sb.toString();
     }
 }
